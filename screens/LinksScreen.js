@@ -5,7 +5,7 @@ import MapView, {
   AnimatedRegion,
 } from 'react-native-maps';
 
-import { ScrollView, StyleSheet, Dimensions, View, Text, Animated, Easing, PanResponder, Platform,  TouchableOpacity, Image } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, View, Text, Animated, Easing, PanResponder, Platform,  TouchableOpacity, Image, Alert } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -40,10 +40,9 @@ export default class LinksScreen extends React.Component {
   
   componentWillMount() {
     this.socket.onmessage = (e) => {
-      this.data = e.data;
-      const lat = this.data.split(',')[1];
-      const long = this.data.split(',')[0];
-      this.setState({latitudes: parseFloat(lat), longitudes: parseFloat(long)});
+      const data = JSON.parse(e.data);
+      const {latitude, longitude, driver_name, plate_number, sensor, deviceid, kmph, mph} = data;
+      this.setState({latitudes: parseFloat(latitude), longitudes: parseFloat(longitude)});
     };
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
@@ -89,15 +88,13 @@ export default class LinksScreen extends React.Component {
     <View style={styles.container}>
                 <MapView.Animated
           style={styles.map}
+          provider ={MapView.PROVIDER_GOOGLE}
           showsUserLocation={true}
-          onRegionChange={this.handleMapRegionChange}
           region={{ latitude: this.state.location.coords.latitude, longitude: this.state.location.coords.longitude, latitudeDelta: 0.01, longitudeDelta: 0.01 }}
         >
-  {this.data && this.state.longitudes && this.state.latitudes  !== null ?
+  {this.state.longitudes && this.state.latitudes  !== null ?
     <Marker.Animated
-    minZoomLevel={13}
-    maxZoomLevel={17}
-      coordinate={this.data !== null ? { latitude: this.state.longitudes, longitude: this.state.latitudes} : null }
+      coordinate={this.state.longitudes !== null ? { latitude: this.state.latitudes, longitude: this.state.longitudes} : null }
      > 
       <Image
     source={{uri: carIcon}}

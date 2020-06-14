@@ -25,7 +25,7 @@ export default class SettingsScreen extends React.Component {
                        imageWidth={200}
                        imageHeight={200}>
                 <Image style={{width:200, height:200}}
-                       source={{uri:'http://uic.utem.edu.my/wp-content/uploads/2019/04/D3lgkwVUwAIGmVS.jpg'}}/>
+                       source={{uri:'https://scontent-dfw5-2.cdninstagram.com/v/t51.2885-15/e35/83952175_1758145144320030_7677577028747572278_n.jpg?_nc_ht=scontent-dfw5-2.cdninstagram.com&_nc_cat=106&_nc_ohc=Qey5od07dL4AX-_HEJv&oh=415733fcb58ecf62c541e3b4b7d7faf6&oe=5F10F33C'}}/>
             </ImageZoom>
 </View>
     );
