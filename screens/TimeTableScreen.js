@@ -1,3 +1,4 @@
+//Timetable Screen
 import React from 'react';
 import { ExpoConfigView } from '@expo/samples';
 import {
@@ -10,10 +11,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ImageZoom from 'react-native-image-pan-zoom';
+import ImageZoom from 'react-native-image-pan-zoom'; //Image Zoom Library
 const screen = Dimensions.get('window');
-export default class SettingsScreen extends React.Component {
-
+export default class TimeTableScreen extends React.Component {
   render()
   {
     const images = [{url: 'http://uic.utem.edu.my/wp-content/uploads/2019/04/D3lgkwVUwAIGmVS.jpg'}];
@@ -33,7 +33,7 @@ export default class SettingsScreen extends React.Component {
  
 }
 
-SettingsScreen.navigationOptions = {
+TimeTableScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({

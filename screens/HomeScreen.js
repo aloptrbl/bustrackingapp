@@ -1,3 +1,4 @@
+//Home Screen
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
@@ -12,17 +13,18 @@ import {
   Alert,
 } from 'react-native';
 import Constants from 'expo-constants';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-const haversine = require('haversine');
+import * as Location from 'expo-location'; // Access Location library
+import * as Permissions from 'expo-permissions'; // Access Permission Library
+const haversine = require('haversine'); // Calculation of two distance in KMPH/MPH using 2 coordinates library
 const screen = Dimensions.get('window');
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      time: new Date().toLocaleTimeString(),
-      date: new Date().toLocaleDateString(),
+      time: new Date().toLocaleTimeString(), // Local Time
+      date: new Date().toLocaleDateString(), // Local Date
     };
+    //Initialize Websocket
     this.socket = new WebSocket('wss://arduino-servers.herokuapp.com:443');
   }
 
@@ -31,6 +33,7 @@ export default class HomeScreen extends React.Component {
       () => this.tick(),
       1000
     );
+    // Stream data from server using Websocket
     this.socket.onmessage = (e) => {
       const data = JSON.parse(e.data);
       const {latitude, longitude, driver_name, plate_number, sensor, deviceid, kmph, mph} = data;
@@ -45,6 +48,7 @@ export default class HomeScreen extends React.Component {
     }
   }
   componentWillUnmount() {
+    //Remove Listener
     clearInterval(this.intervalID);
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
@@ -57,6 +61,7 @@ export default class HomeScreen extends React.Component {
     this.location;
   }
 
+  //Access permission location
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
@@ -65,14 +70,17 @@ export default class HomeScreen extends React.Component {
       });
     }
 
+  //Change map region
     _handleMapRegionChange = location => {
       this.setState({ location });
     };
 
+    //Get current location
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location });
   };
 
+  //Time showing in realtime
   tick() {
     this.setState({
       time: new Date().toLocaleTimeString(),
@@ -80,6 +88,7 @@ export default class HomeScreen extends React.Component {
     });
   }
 
+  //User Interface
 render() {
   let text = 'Waiting..';
   if (this.state.errorMessage) {
@@ -108,7 +117,7 @@ render() {
           <Text style={styles.getStartedText}>Welcome</Text>
 
           <View>
-            <Text>Bus Location Monitoring App</Text>
+            <Text>Bus Location Monitoring Application</Text>
           </View>
           <Text style={{fontSize: 30,fontWeight:'bold'}}>{this.state.time}</Text>
           <Text style={{fontSize: 12}}>{this.state.date}</Text>
